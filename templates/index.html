@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Expense Tracker</title>
+
+    <!-- Link CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header>
+        <h1>💸 Expense Tracker</h1>
+        <p>Track your daily spending easily</p>
+      </header>
+
+      <!-- Balance Card -->
+      <div class="balance-card">
+        <h2>Total Expenses</h2>
+        <p class="amount">₹ {{ total }}</p>
+      </div>
+
+      <!-- Form Section -->
+      <div class="form-section">
+        <h3>Add Transaction</h3>
+
+        <form action="/add" method="POST">
+          <input type="text" name="title" placeholder="Enter title" required />
+
+          <input
+            type="number"
+            name="amount"
+            placeholder="Enter amount"
+            required
+          />
+
+          <select name="category" required>
+            <option value="" disabled selected>Select Category</option>
+            <option>Food</option>
+            <option>Travel</option>
+            <option>Shopping</option>
+            <option>Other</option>
+          </select>
+
+          <button type="submit">➕ Add Transaction</button>
+        </form>
+      </div>
+
+      <!-- Transactions -->
+      <div class="transactions">
+        <h3>📜 Transaction History</h3>
+
+        {% if transactions %}
+        <div class="list">
+          {% for t in transactions %}
+          <div class="card">
+            <div class="left">
+              <strong>{{ t[1] }}</strong>
+              <span>{{ t[3] }}</span>
+            </div>
+
+            <div class="right">
+              <span class="price">₹{{ t[2] }}</span>
+
+              <a
+                href="/delete/{{ t[0] }}"
+                class="delete-btn"
+                onclick="return confirm('Delete this transaction?');"
+              >
+                Delete
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty">No transactions yet</p>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>
